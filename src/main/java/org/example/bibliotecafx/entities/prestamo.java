@@ -7,14 +7,16 @@ public class prestamo {
     socio socioP;
     String fP;
     String fD;
-    int idP;
+    Integer idP;
+    boolean finalizado=false;
 
-    public prestamo(String fD, String fP, socio socioP, libro libroP, int idP) {
+    public prestamo(String fD, String fP, socio socioP, libro libroP, Integer idP, boolean finalizado) {
         this.fD = fD;
         this.fP = fP;
         this.socioP = socioP;
         this.libroP = libroP;
         this.idP = idP;
+        this.finalizado = finalizado;
     }
 
     public prestamo() {
@@ -56,8 +58,16 @@ public class prestamo {
         return idP;
     }
 
-    public void setIdP(int idP) {
+    public void setIdP(Integer idP) {
         this.idP = idP;
+    }
+
+    public boolean isFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(boolean finalizado) {
+        this.finalizado = finalizado;
     }
 
     @Override
@@ -68,6 +78,7 @@ public class prestamo {
                 ", fP='" + fP + '\'' +
                 ", fD='" + fD + '\'' +
                 ", idP=" + idP +
+                ", finalizado=" + finalizado +
                 '}';
     }
 }

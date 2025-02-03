@@ -7,9 +7,9 @@ public class libro {
     autor autor;
     String editorial;
     int anyoPub;
-    int idL;
+    Integer idL;
 
-    public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub, int idL) {
+    public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub, Integer idL) {
         this.titulo = titulo;
         this.ISBN = ISBN;
         this.autor = autor;
@@ -65,7 +65,7 @@ public class libro {
         return idL;
     }
 
-    public void setIdL(int idL) {
+    public void setIdL(Integer idL) {
         this.idL = idL;
     }
 

@@ -6,9 +6,9 @@ public class socio {
     String nombre;
     String direccion;
     int nTel;
-    int idS;
+    Integer idS;
 
-    public socio(String nombre, String direccion, int nTel, int idS) {
+    public socio(String nombre, String direccion, int nTel, Integer idS) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.nTel = nTel;
@@ -38,7 +38,7 @@ public class socio {
         return nTel;
     }
 
-    public void setnTel(int nTel) {
+    public void setnTel(Integer nTel) {
         this.nTel = nTel;
     }
 

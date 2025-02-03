@@ -35,4 +35,18 @@ public class autorDAO implements Iautor{
 
         return autor2;
     }
+    /**
+     * @param nombre
+     * @return autores segun nombre
+     */
+    @Override
+    public autor findByNombre(String nombre) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        autor autor3 = session.find(autor.class, nombre);
+
+        session.close();
+
+        return autor3;
+    }
 }

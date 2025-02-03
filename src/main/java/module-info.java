@@ -18,4 +18,6 @@ module org.example.bibliotecafx {
     opens org.example.bibliotecafx.entities to javafx.fxml;
     exports org.example.bibliotecafx.vista;
     opens org.example.bibliotecafx.vista to javafx.fxml;
+    exports org.example.bibliotecafx.controladores;
+    opens org.example.bibliotecafx.controladores to javafx.fxml;
 }

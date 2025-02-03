@@ -9,7 +9,7 @@ import java.util.List;
 
 public class socioDAO implements Isocio{
     /**
-     * @return todos los libros
+     * @return todos los socios
      */
     @Override
     public List<socio> findAll() {
@@ -24,7 +24,7 @@ public class socioDAO implements Isocio{
 
     /**
      * @param id
-     * @return libros segun id
+     * @return socios segun id
      */
     @Override
     public socio findById(Integer id) {
@@ -35,5 +35,33 @@ public class socioDAO implements Isocio{
         session.close();
 
         return socio2;
+    }
+    /**
+     * @param nombre
+     * @return socios segun nombre
+     */
+    @Override
+    public socio findByNombre(String nombre) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        socio socio3 = session.find(socio.class, nombre);
+
+        session.close();
+
+        return socio3;
+    }
+    /**
+     * @param nTel
+     * @return socios segun numero telefono
+     */
+    @Override
+    public socio findByTel(Integer nTel) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        socio socio4 = session.find(socio.class, nTel);
+
+        session.close();
+
+        return socio4;
     }
 }

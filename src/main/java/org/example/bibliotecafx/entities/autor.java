@@ -2,12 +2,12 @@ package org.example.bibliotecafx.entities;
 
 public class autor {
 // nombre , nacionalidad e id
-    int idA;
+    Integer idA;
     String nombre;
     String nacionalidad;
 
 
-    public autor(String nombre, String nacionalidad, int idA) {
+    public autor(String nombre, String nacionalidad, Integer idA) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
         this.idA = idA;
@@ -36,7 +36,7 @@ public class autor {
         return idA;
     }
 
-    public void setIdA(int idA) {
+    public void setIdA(Integer idA) {
         this.idA = idA;
     }
 

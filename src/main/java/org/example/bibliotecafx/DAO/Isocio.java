@@ -9,4 +9,6 @@ import java.util.List;
 public interface Isocio {
     public List<socio> findAll();
     public socio findById(Integer id);
+    public socio findByNombre(String nombre);
+    public socio findByTel(Integer nTel);
 }
