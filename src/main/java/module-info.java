@@ -10,6 +10,7 @@ module org.example.bibliotecafx {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires org.hibernate.orm.core;
 
     opens org.example.bibliotecafx to javafx.fxml;
     exports org.example.bibliotecafx;

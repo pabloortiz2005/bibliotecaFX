@@ -7,13 +7,15 @@ public class libro {
     autor autor;
     String editorial;
     int anyoPub;
+    int idL;
 
-    public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub) {
+    public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub, int idL) {
         this.titulo = titulo;
         this.ISBN = ISBN;
         this.autor = autor;
         this.editorial = editorial;
         this.anyoPub = anyoPub;
+        this.idL = idL;
     }
 
     public libro() {
@@ -59,6 +61,14 @@ public class libro {
         this.titulo = titulo;
     }
 
+    public int getIdL() {
+        return idL;
+    }
+
+    public void setIdL(int idL) {
+        this.idL = idL;
+    }
+
     @Override
     public String toString() {
         return "libro{" +
@@ -67,6 +77,7 @@ public class libro {
                 ", autor=" + autor +
                 ", editorial='" + editorial + '\'' +
                 ", anyoPub=" + anyoPub +
+                ", idL=" + idL +
                 '}';
     }
 }

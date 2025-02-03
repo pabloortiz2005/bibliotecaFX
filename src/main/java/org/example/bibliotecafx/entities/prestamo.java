@@ -7,12 +7,14 @@ public class prestamo {
     socio socioP;
     String fP;
     String fD;
+    int idP;
 
-    public prestamo(String fD, String fP, socio socioP, libro libroP) {
+    public prestamo(String fD, String fP, socio socioP, libro libroP, int idP) {
         this.fD = fD;
         this.fP = fP;
         this.socioP = socioP;
         this.libroP = libroP;
+        this.idP = idP;
     }
 
     public prestamo() {
@@ -50,6 +52,14 @@ public class prestamo {
         this.fD = fD;
     }
 
+    public int getIdP() {
+        return idP;
+    }
+
+    public void setIdP(int idP) {
+        this.idP = idP;
+    }
+
     @Override
     public String toString() {
         return "prestamo{" +
@@ -57,6 +67,7 @@ public class prestamo {
                 ", socioP=" + socioP +
                 ", fP='" + fP + '\'' +
                 ", fD='" + fD + '\'' +
+                ", idP=" + idP +
                 '}';
     }
 }

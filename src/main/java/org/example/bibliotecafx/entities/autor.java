@@ -1,14 +1,16 @@
 package org.example.bibliotecafx.entities;
 
 public class autor {
-// nombre y nacionalidad
+// nombre , nacionalidad e id
+    int idA;
     String nombre;
-    String Nacionalidad;
+    String nacionalidad;
 
 
-    public autor(String nombre, String nacionalidad) {
+    public autor(String nombre, String nacionalidad, int idA) {
         this.nombre = nombre;
-        Nacionalidad = nacionalidad;
+        this.nacionalidad = nacionalidad;
+        this.idA = idA;
     }
 
     public autor() {
@@ -23,18 +25,27 @@ public class autor {
     }
 
     public String getNacionalidad() {
-        return Nacionalidad;
+        return this.nacionalidad;
     }
 
     public void setNacionalidad(String nacionalidad) {
-        Nacionalidad = nacionalidad;
+        this.nacionalidad = nacionalidad;
+    }
+
+    public int getIdA() {
+        return idA;
+    }
+
+    public void setIdA(int idA) {
+        this.idA = idA;
     }
 
     @Override
     public String toString() {
         return "autor{" +
-                "nombre='" + nombre + '\'' +
-                ", Nacionalidad='" + Nacionalidad + '\'' +
+                "idA=" + idA +
+                ", nombre='" + nombre + '\'' +
+                ", nacionalidad='" + nacionalidad + '\'' +
                 '}';
     }
 }
