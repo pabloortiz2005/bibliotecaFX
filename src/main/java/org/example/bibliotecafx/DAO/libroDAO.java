@@ -14,18 +14,24 @@ import java.util.Scanner;
 
 public class libroDAO implements Ilibro {
     /**
-     * @return todos los libros
+     * @return todos los libros disponibles
      */
     @Override
     public List<libro> findAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<libro> libro = session.createQuery("from libro", libro.class).list();
+        // Consulta que obtiene los libros que no están en préstamo
+        List<libro> librosDisponibles = session.createQuery(
+                        "SELECT l FROM libro l WHERE NOT EXISTS (" +
+                                "SELECT p FROM prestamo p WHERE p.libroP = l AND p.finalizado = false" +
+                                ")", libro.class)
+                .list();
 
         session.close();
 
-        return libro;
+        return librosDisponibles;
     }
+
 
     /**
      * @param id
