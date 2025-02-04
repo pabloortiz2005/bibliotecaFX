@@ -14,7 +14,7 @@ module org.example.bibliotecafx {
     requires jakarta.persistence;
 
     opens org.example.bibliotecafx to javafx.fxml;
-    exports org.example.bibliotecafx;
+
     exports org.example.bibliotecafx.entities;
     opens org.example.bibliotecafx.entities to javafx.fxml;
     exports org.example.bibliotecafx.vista;

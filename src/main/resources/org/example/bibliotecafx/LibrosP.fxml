@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="690.0" prefWidth="916.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bibliotecafx.controladores.LibrosController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+
+   <children>
+
+      <HBox prefHeight="120.0" prefWidth="876.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="BOTTOM" prefHeight="120.0" prefWidth="876.0" text="Libros" textFill="RED">
+               <font>
+                  <Font name="Centaur" size="83.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+
+
+      <HBox alignment="CENTER" spacing="20.0">
+         <Button fx:id="btnCrear" prefWidth="150" text="Crear Libro" />
+         <Button fx:id="btnModificar" prefWidth="150" text="Modificar Libro" />
+         <Button fx:id="btnBuscar" prefWidth="150" text="Buscar Libro" />
+         <Button fx:id="btnListarAutor" prefWidth="150" text="Listar Libros por Autor" />
+         <Button fx:id="btnEliminar" prefWidth="150" text="Eliminar Libro" />
+         <Button fx:id="btnListarTodos" prefWidth="150" text="Listar Todos los Libros" />
+      </HBox>
+
+
+      <TableView fx:id="tablaResultados" prefHeight="355.0" prefWidth="876.0">
+         <columns>
+            <TableColumn fx:id="colTitulo" prefWidth="150" text="Titulo" />
+            <TableColumn fx:id="colISBN" prefWidth="150" text="ISBN" />
+            <TableColumn fx:id="colAutor" prefWidth="150" text="Autor" />
+            <TableColumn fx:id="colEditorial" prefWidth="150" text="Editorial" />
+            <TableColumn fx:id="colAnyo" prefWidth="150" text="Año Publicación" />
+         </columns>
+      </TableView>
+   </children>
+</VBox>
