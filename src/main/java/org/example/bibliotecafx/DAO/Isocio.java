@@ -2,6 +2,7 @@ package org.example.bibliotecafx.DAO;
 
 
 
+import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.socio;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface Isocio {
     public socio findByNombre(String nombre);
     public socio findByTel(Integer nTel);
     public void deleteById(Integer id);
+    public socio ChangeSocio(Integer id);
+    public socio create(socio socio);
 }

@@ -3,11 +3,14 @@ package org.example.bibliotecafx.DAO;
 
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
+import org.example.bibliotecafx.entities.prestamo;
+import org.example.bibliotecafx.entities.socio;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class libroDAO implements Ilibro {
     /**
@@ -122,5 +125,97 @@ public class libroDAO implements Ilibro {
             session.close();
         }
     }
+    /**
+     * @param id
+     * @return Cambiar libro
+     */
+    @Override
+    public libro ChangeLibro(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        libro libro6 = session.find(libro.class, id);
+
+        if (libro6 != null) {
+
+            autorDAO autorDAO = new autorDAO();
+
+            System.out.println("Inserte los datos del libro que quiere modificar");
+            Scanner scanner = new Scanner(System.in);
+            Scanner scanner2 = new Scanner(System.in);
+
+            System.out.print("Titulo: ");
+            libro6.setTitulo(scanner.nextLine());
+
+            System.out.print("ISBN: ");
+            libro6.setISBN(scanner.nextLine());
+
+
+            System.out.print("Nombre del autor: ");
+            String autorNombre = scanner.nextLine();
+            autor autor = autorDAO.findByNombre(autorNombre);
+
+            // Verificar si el autor fue encontrado antes de asignarlo al libro
+            if (autor != null) {
+                libro6.setAutor(autor);
+            } else {
+                System.out.println("No se encontró un autor con ese nombre.");
+            }
+
+            System.out.print("Editorial: ");
+            libro6.setEditorial(scanner.nextLine());
+
+            System.out.print("Año de publicación: ");
+            libro6.setAnyoPub(scanner2.nextInt());
+
+            // Iniciar la transacción y actualizar el libro
+            session.beginTransaction();
+            session.update(libro6);
+            session.getTransaction().commit();
+
+        } else {
+            System.out.println("No se encontró un libro con el ID especificado.");
+        }
+
+        session.close();
+        return libro6;
+    }
+    /**
+     * @param libro
+     * @return Crear prestamo
+     */
+    @Override
+    public libro create(libro libro) {
+
+        autorDAO autorDAO = new autorDAO();
+
+        Scanner scanner = new Scanner(System.in);
+        Scanner scanner2 = new Scanner(System.in);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        libro libro7 = new libro();
+
+        System.out.print("Nombre del autor: ");
+        String autorNombre = scanner.nextLine();
+        autor autor = autorDAO.findByNombre(autorNombre);
+
+        // Verificar si el autor fue encontrado antes de asignarlo al libro
+        if (autor != null) {
+            libro7.setAutor(autor);
+        } else {
+            System.out.println("No se encontró un autor con ese nombre.");
+        }
+
+
+        System.out.print("ISBN: ");
+        libro7.setISBN(scanner.nextLine());
+        System.out.print("Titulo: ");
+        libro7.setTitulo(scanner.nextLine());
+        System.out.print("Editorial: ");
+        libro7.setEditorial(scanner.nextLine());
+        System.out.print("Año de publicación: ");
+        libro7.setAnyoPub(scanner2.nextInt());
+
+        return libro7;
+    }
+
 
 }

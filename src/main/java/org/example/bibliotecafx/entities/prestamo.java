@@ -1,5 +1,9 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class prestamo {
     // préstamos de libros a socios, especificando la fecha de préstamo y la fecha de devolución
 
@@ -7,7 +11,11 @@ public class prestamo {
     socio socioP;
     String fP;
     String fD;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idP;
+
     boolean finalizado=false;
 
     public prestamo(String fD, String fP, socio socioP, libro libroP, Integer idP, boolean finalizado) {

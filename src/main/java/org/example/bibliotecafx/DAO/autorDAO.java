@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class autorDAO implements Iautor{
     /**
@@ -91,4 +92,58 @@ public class autorDAO implements Iautor{
             session.close();
         }
     }
+    /**
+     * @param id
+     * @return Cambiar autor
+     */
+    @Override
+    public autor ChangeAutor(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        autor autor4 = session.find(autor.class, id);
+
+        if (autor4 != null) {
+
+            System.out.println("Inserte los datos del autor que quiere modificar");
+            Scanner scanner = new Scanner(System.in);
+            Scanner scanner2 = new Scanner(System.in);
+
+            System.out.print("Nombre: ");
+            autor4.setNombre(scanner.nextLine());
+
+            System.out.print("Nacionalidad: ");
+            autor4.setNacionalidad(scanner.nextLine());
+
+            // Iniciar la transacción y actualizar el Autor
+            session.beginTransaction();
+            session.update(autor4);
+            session.getTransaction().commit();
+
+        } else {
+            System.out.println("No se encontró un autor con el ID especificado.");
+        }
+
+        session.close();
+        return autor4;
+    }
+    /**
+     * @param autor
+     * @return Crear autor
+     */
+
+    @Override
+    public autor create(autor autor) {
+        Scanner scanner = new Scanner(System.in);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        autor autor5 = new autor();
+
+        System.out.println("Nombre");
+        autor5.setNombre(scanner.nextLine());
+
+        System.out.println("Nacionalidad: ");
+        autor5.setNacionalidad(scanner.nextLine());
+
+        return autor5;
+    }
+
 }

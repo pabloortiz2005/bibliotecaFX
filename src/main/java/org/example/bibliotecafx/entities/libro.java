@@ -1,5 +1,9 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class libro {
     // título, ISBN, autor, editorial y año de publicación
     String titulo;
@@ -7,6 +11,9 @@ public class libro {
     autor autor;
     String editorial;
     int anyoPub;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idL;
 
     public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub, Integer idL) {

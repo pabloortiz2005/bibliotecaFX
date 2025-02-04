@@ -1,11 +1,18 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class socio {
     // nombre, dirección y número de teléfono
 
     String nombre;
     String direccion;
     int nTel;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idS;
 
     public socio(String nombre, String direccion, int nTel, Integer idS) {

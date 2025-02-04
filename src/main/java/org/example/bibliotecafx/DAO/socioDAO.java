@@ -1,6 +1,7 @@
 package org.example.bibliotecafx.DAO;
 
 
+
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.socio;
 import org.example.bibliotecafx.util.HibernateUtil;
@@ -8,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class socioDAO implements Isocio{
     /**
@@ -105,5 +107,66 @@ public class socioDAO implements Isocio{
             // Cerrar la sesión
             session.close();
         }
+    }
+    /**
+     * @param id
+     * @return Cambiar autor
+     */
+    @Override
+    public socio ChangeSocio(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        socio socio5 = session.find(socio.class, id);
+
+        if (socio5 != null) {
+
+
+            System.out.println("Inserte los datos del socio5 que quiere modificar");
+            Scanner scanner = new Scanner(System.in);
+            Scanner scanner2 = new Scanner(System.in);
+
+            System.out.print("Nombre: ");
+            socio5.setNombre(scanner.nextLine());
+
+            System.out.print("Dirección: ");
+            socio5.setDireccion(scanner.nextLine());
+
+            System.out.print("Numero de telefono: ");
+            socio5.setnTel(scanner2.nextInt());
+
+            // Iniciar la transacción y actualizar el Autor
+            session.beginTransaction();
+            session.update(socio5);
+            session.getTransaction().commit();
+
+        } else {
+            System.out.println("No se encontró un socio con el ID especificado.");
+        }
+
+        session.close();
+        return socio5;
+    }
+    /**
+     * @param socio
+     * @return Crear socio
+     */
+
+    @Override
+    public socio create(socio socio) {
+        Scanner scanner = new Scanner(System.in);
+        Scanner scanner2 = new Scanner(System.in);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        socio socio6 = new socio();
+
+        System.out.println("Nombre");
+        socio6.setNombre(scanner.nextLine());
+
+        System.out.println("Direccion: ");
+        socio6.setDireccion(scanner.nextLine());
+
+        System.out.println("Numero de telefono: ");
+        socio6.setnTel(scanner2.nextInt());
+
+        return socio6;
     }
 }
