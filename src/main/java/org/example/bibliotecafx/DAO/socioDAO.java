@@ -1,9 +1,11 @@
 package org.example.bibliotecafx.DAO;
 
 
+import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.socio;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -63,5 +65,45 @@ public class socioDAO implements Isocio{
         session.close();
 
         return socio4;
+    }
+    /**
+     * @param id
+     * @return borra un libro segun id
+     */
+    @Override
+    public void deleteById(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        // Iniciar una transacción
+        Transaction transaction = null;
+
+        try {
+            // Iniciar la transacción
+            transaction = session.beginTransaction();
+
+            // Buscar el socio por su ID
+            socio socio = session.get(socio.class, id);
+
+            // Verificar si el socio fue encontrado
+            if (socio != null) {
+                // Eliminar el socio
+                session.delete(socio);
+                System.out.println("El socio con ID " + id + " ha sido eliminado.");
+            } else {
+                System.out.println("No se encontró un socio con el ID proporcionado.");
+            }
+
+            // Hacer commit de la transacción
+            transaction.commit();
+        } catch (Exception e) {
+            // Si hay algún error, hacer rollback
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            // Cerrar la sesión
+            session.close();
+        }
     }
 }

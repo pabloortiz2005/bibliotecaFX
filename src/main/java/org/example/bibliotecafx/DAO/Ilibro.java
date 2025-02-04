@@ -11,4 +11,5 @@ public interface Ilibro {
     public libro findByISBN(String ISBN);
     public List<libro> findByAutor(autor autor);
     public libro findByTitulo(String titulo);
+    public void deleteById(Integer id);
 }

@@ -11,4 +11,5 @@ public interface Isocio {
     public socio findById(Integer id);
     public socio findByNombre(String nombre);
     public socio findByTel(Integer nTel);
+    public void deleteById(Integer id);
 }

@@ -5,6 +5,7 @@ import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -80,6 +81,46 @@ public class libroDAO implements Ilibro {
         session.close();
 
         return libro5;
+    }
+    /**
+     * @param id
+     * @return borra un libro segun id
+     */
+    @Override
+    public void deleteById(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        // Iniciar una transacción
+        Transaction transaction = null;
+
+        try {
+            // Iniciar la transacción
+            transaction = session.beginTransaction();
+
+            // Buscar el libro por su ID
+            libro libro = session.get(libro.class, id);
+
+            // Verificar si el libro fue encontrado
+            if (libro != null) {
+                // Eliminar el libro
+                session.delete(libro);
+                System.out.println("El libro con ID " + id + " ha sido eliminado.");
+            } else {
+                System.out.println("No se encontró un libro con el ID proporcionado.");
+            }
+
+            // Hacer commit de la transacción
+            transaction.commit();
+        } catch (Exception e) {
+            // Si hay algún error, hacer rollback
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            // Cerrar la sesión
+            session.close();
+        }
     }
 
 }
