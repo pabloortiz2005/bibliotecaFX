@@ -21,10 +21,14 @@
       </HBox>
       <HBox layoutX="30.0" layoutY="295.0" prefHeight="644.0" prefWidth="876.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0" text="Gestion Libros" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0" text="Gestion Autores" />
-            <Button layoutX="448.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0" text="Gestion Socios" />
-            <Button layoutX="594.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0" text="Gestion Prestamos" />
+            <Button fx:id="btnGestionLibros" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0" text="Gestion Libros"
+                    onAction="#manejarGestionLibros" />
+            <Button fx:id="btnGestionAutores" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0"
+                    text="Gestion Autores" onAction="#manejarGestionAutores" />
+            <Button fx:id="btnGestionSocios" layoutX="448.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0"
+                    text="Gestion Socios" onAction="#manejarGestionSocios" />
+            <Button fx:id="btnGestionPrestamos" layoutX="594.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0"
+                    text="Gestion Prestamos" onAction="#manejarGestionPrestamos" />
          </children>
       </HBox>
    </children>

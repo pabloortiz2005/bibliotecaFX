@@ -14,4 +14,5 @@ public interface Ilibro {
     public void deleteById(Integer id);
     public libro ChangeLibro(Integer id);
     public libro create(libro libro);
+    List<libro> buscarLibro(String titulo, String autor, String isbn);
 }

@@ -1,24 +1,24 @@
 module org.example.bibliotecafx {
+    // Requiere módulos externos
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-
-    requires org.controlsfx.controls;
-    requires com.dlsc.formsfx;
-    requires net.synedra.validatorfx;
-    requires org.kordamp.ikonli.javafx;
-    requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
-    requires com.almasb.fxgl.all;
+    requires javafx.media;
     requires org.hibernate.orm.core;
     requires jakarta.persistence;
+    requires java.naming;
 
-    opens org.example.bibliotecafx to javafx.fxml;
-
-    exports org.example.bibliotecafx.entities;
-    opens org.example.bibliotecafx.entities to javafx.fxml;
-    exports org.example.bibliotecafx.vista;
-    opens org.example.bibliotecafx.vista to javafx.fxml;
-    exports org.example.bibliotecafx.controladores;
+    // Abre los paquetes para que puedan ser accedidos en tiempo de ejecución
     opens org.example.bibliotecafx.controladores to javafx.fxml;
+    opens org.example.bibliotecafx.DAO to javafx.fxml; // Si algún controlador necesita acceso
+    opens org.example.bibliotecafx.entities to org.hibernate.orm.core, javafx.fxml;
+    opens org.example.bibliotecafx.util to javafx.fxml;
+    opens org.example.bibliotecafx.vista to javafx.fxml;
+
+    // Exporta los paquetes que necesitan ser accesibles para otros módulos
+    exports org.example.bibliotecafx.controladores;
+    exports org.example.bibliotecafx.DAO;
+    exports org.example.bibliotecafx.entities;
+    exports org.example.bibliotecafx.util;
+    exports org.example.bibliotecafx.vista;
 }

@@ -1,227 +1,231 @@
 package org.example.bibliotecafx.DAO;
 
-
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
-import org.example.bibliotecafx.entities.prestamo;
-import org.example.bibliotecafx.entities.socio;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class libroDAO implements Ilibro {
+
     /**
-     * @return todos los libros disponibles
+     * Encuentra todos los libros disponibles (que no están en préstamo).
+     *
+     * @return Lista de libros disponibles.
      */
     @Override
     public List<libro> findAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        // Consulta que obtiene los libros que no están en préstamo
         List<libro> librosDisponibles = session.createQuery(
                         "SELECT l FROM libro l WHERE NOT EXISTS (" +
                                 "SELECT p FROM prestamo p WHERE p.libroP = l AND p.finalizado = false" +
                                 ")", libro.class)
                 .list();
-
         session.close();
-
         return librosDisponibles;
     }
 
-
     /**
-     * @param id
-     * @return libros segun id
+     * Busca un libro por su ID.
+     *
+     * @param id ID del libro a buscar.
+     * @return El libro con el ID especificado.
      */
     @Override
     public libro findById(Integer id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        libro libro2 = session.find(libro.class, id);
-
+        libro libroEncontrado = session.find(libro.class, id);
         session.close();
-
-        return libro2;
+        return libroEncontrado;
     }
+
     /**
-     * @param ISBN
-     * @return libros segun ISBN
+     * Busca un libro por su ISBN.
+     *
+     * @param ISBN El ISBN del libro a buscar.
+     * @return El libro con el ISBN especificado.
      */
     @Override
     public libro findByISBN(String ISBN) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        libro libro3 = session.find(libro.class, ISBN);
-
+        libro libroPorISBN = session.createQuery("FROM libro WHERE ISBN = :ISBN", libro.class)
+                .setParameter("ISBN", ISBN)
+                .uniqueResult();
         session.close();
-
-        return libro3;
+        return libroPorISBN;
     }
+
     /**
-     * @param autor
-     * @return libros segun autor
+     * Busca libros por un autor.
+     *
+     * @param autor Objeto autor que se desea buscar.
+     * @return Lista de libros del autor especificado.
      */
     @Override
-    public  List<libro> findByAutor(autor autor) {
+    public List<libro> findByAutor(autor autor) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        List<libro> libro4 = session.createQuery("from libro where autor = :autor", libro.class)
+        List<libro> librosPorAutor = session.createQuery("FROM libro WHERE autor = :autor", libro.class)
                 .setParameter("autor", autor)
                 .list();
-
         session.close();
-
-        return libro4;
+        return librosPorAutor;
     }
+
     /**
-     * @param titulo
-     * @return libros segun titulo
+     * Busca un libro por su título.
+     *
+     * @param titulo El título del libro a buscar.
+     * @return El libro con el título especificado.
      */
     @Override
     public libro findByTitulo(String titulo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
+        libro libroPorTitulo = session.createQuery("FROM libro WHERE titulo = :titulo", libro.class)
+                .setParameter("titulo", titulo)
+                .uniqueResult();
+        session.close();
+        return libroPorTitulo;
+    }
 
-        libro libro5 = session.find(libro.class, titulo);
+    @Override
+    public List<libro> buscarLibro(String titulo, String autor, String isbn) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        String query = "FROM libro L WHERE (:titulo IS NULL OR L.titulo LIKE :titulo) "
+                + "AND (:autor IS NULL OR L.autor.nombre LIKE :autor) "
+                + "AND (:isbn IS NULL OR L.ISBN LIKE :isbn)";
+
+        List<libro> libros = session.createQuery(query, libro.class)
+                .setParameter("titulo", titulo.isEmpty() ? null : "%" + titulo + "%")
+                .setParameter("autor", autor.isEmpty() ? null : "%" + autor + "%")
+                .setParameter("isbn", isbn.isEmpty() ? null : "%" + isbn + "%")
+                .list();
 
         session.close();
-
-        return libro5;
+        return libros;
     }
     /**
-     * @param id
-     * @return borra un libro segun id
+     * Elimina un libro por su ID.
+     *
+     * @param id El ID del libro a eliminar.
      */
     @Override
     public void deleteById(Integer id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        // Iniciar una transacción
         Transaction transaction = null;
 
         try {
-            // Iniciar la transacción
             transaction = session.beginTransaction();
-
-            // Buscar el libro por su ID
-            libro libro = session.get(libro.class, id);
-
-            // Verificar si el libro fue encontrado
+            libro libro = session.find(libro.class, id);
             if (libro != null) {
-                // Eliminar el libro
                 session.delete(libro);
                 System.out.println("El libro con ID " + id + " ha sido eliminado.");
             } else {
                 System.out.println("No se encontró un libro con el ID proporcionado.");
             }
-
-            // Hacer commit de la transacción
             transaction.commit();
         } catch (Exception e) {
-            // Si hay algún error, hacer rollback
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * Modifica un libro existente.
+     *
+     * @param id Objeto libro con los datos actualizados.
+     * @return El libro modificado.
+     */
+    @Override
+    public libro ChangeLibro(Integer id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        libro libroExistente = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // Buscar el libro por su ID
+            libroExistente = session.find(libro.class, id);
+            if (libroExistente == null) {
+                System.out.println("No se encontró un libro con el ID proporcionado.");
+                return null;
+            }
+
+            // Cambiar los datos en tiempo real
+            libroExistente.setTitulo("Nuevo Título"); // Cambiar el título aquí
+            libroExistente.setISBN("1234567890123"); // Cambiar el ISBN aquí
+            libroExistente.setEditorial("Nueva Editorial"); // Cambiar la editorial aquí
+            libroExistente.setAnyoPub(2023); // Cambiar el año de publicación aquí
+
+            // Si es necesario cambiar el autor:
+            autorDAO autorDAO = new autorDAO();
+            autor nuevoAutor = autorDAO.findByNombre("Nombre Autor");
+            if (nuevoAutor != null) {
+                libroExistente.setAutor(nuevoAutor);
+            } else {
+                // Crear un nuevo autor si no existe
+                autor autorCreado = new autor();
+                autorCreado.setNombre("Nombre Autor");
+                autorDAO.create(autorCreado);
+                libroExistente.setAutor(autorCreado);
+            }
+
+            // Guardar los cambios
+            session.update(libroExistente);
+            transaction.commit();
+            System.out.println("El libro con ID " + libroExistente.getIdL() + " ha sido actualizado correctamente.");
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
         } finally {
-            // Cerrar la sesión
             session.close();
         }
+
+        return libroExistente;
     }
+
     /**
-     * @param id
-     * @return Cambiar libro
-     */
-    @Override
-    public libro ChangeLibro(Integer id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        libro libro6 = session.find(libro.class, id);
-
-        if (libro6 != null) {
-
-            autorDAO autorDAO = new autorDAO();
-
-            System.out.println("Inserte los datos del libro que quiere modificar");
-            Scanner scanner = new Scanner(System.in);
-            Scanner scanner2 = new Scanner(System.in);
-
-            System.out.print("Titulo: ");
-            libro6.setTitulo(scanner.nextLine());
-
-            System.out.print("ISBN: ");
-            libro6.setISBN(scanner.nextLine());
-
-
-            System.out.print("Nombre del autor: ");
-            String autorNombre = scanner.nextLine();
-            autor autor = autorDAO.findByNombre(autorNombre);
-
-            // Verificar si el autor fue encontrado antes de asignarlo al libro
-            if (autor != null) {
-                libro6.setAutor(autor);
-            } else {
-                System.out.println("No se encontró un autor con ese nombre.");
-            }
-
-            System.out.print("Editorial: ");
-            libro6.setEditorial(scanner.nextLine());
-
-            System.out.print("Año de publicación: ");
-            libro6.setAnyoPub(scanner2.nextInt());
-
-            // Iniciar la transacción y actualizar el libro
-            session.beginTransaction();
-            session.update(libro6);
-            session.getTransaction().commit();
-
-        } else {
-            System.out.println("No se encontró un libro con el ID especificado.");
-        }
-
-        session.close();
-        return libro6;
-    }
-    /**
-     * @param libro
-     * @return Crear prestamo
+     * Crea un nuevo libro en la base de datos.
+     *
+     * @param libro Objeto libro con los datos a insertar.
+     * @return El libro creado.
      */
     @Override
     public libro create(libro libro) {
-
-        autorDAO autorDAO = new autorDAO();
-
-        Scanner scanner = new Scanner(System.in);
-        Scanner scanner2 = new Scanner(System.in);
         Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
 
-        libro libro7 = new libro();
+        try {
+            transaction = session.beginTransaction();
+            autor autor = libro.getAutor();
 
-        System.out.print("Nombre del autor: ");
-        String autorNombre = scanner.nextLine();
-        autor autor = autorDAO.findByNombre(autorNombre);
+            if (autor != null) {
+                autorDAO autorDAO = new autorDAO();
+                autor autorExistente = autorDAO.findByNombre(autor.getNombre());
+                if (autorExistente == null) {
+                    autorDAO.create(autor); // Creamos el autor si no existe.
+                } else {
+                    libro.setAutor(autorExistente); // Asociamos el autor existente con el libro.
+                }
+            }
 
-        // Verificar si el autor fue encontrado antes de asignarlo al libro
-        if (autor != null) {
-            libro7.setAutor(autor);
-        } else {
-            System.out.println("No se encontró un autor con ese nombre.");
+            session.save(libro);
+            transaction.commit();
+            System.out.println("El libro se ha creado correctamente.");
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
 
-
-        System.out.print("ISBN: ");
-        libro7.setISBN(scanner.nextLine());
-        System.out.print("Titulo: ");
-        libro7.setTitulo(scanner.nextLine());
-        System.out.print("Editorial: ");
-        libro7.setEditorial(scanner.nextLine());
-        System.out.print("Año de publicación: ");
-        libro7.setAnyoPub(scanner2.nextInt());
-
-        return libro7;
+        return libro;
     }
-
-
 }
