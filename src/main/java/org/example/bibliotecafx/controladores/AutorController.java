@@ -79,6 +79,7 @@ public class AutorController {
             autor = autorDAO.findByNombre(nombre);
             if (autor != null) {
                 tablaAutores.getItems().setAll(autor);
+                tablaAutores.getSelectionModel().select(autor);
             } else {
                 mostrarAlerta("Información", "No se encontraron autores con los criterios proporcionados.", AlertType.INFORMATION);
             }
