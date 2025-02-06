@@ -95,16 +95,20 @@ public class SocioController {
 
             if (nombre.isEmpty() && NTel == null) {
                 mostrarAlerta("Error", "Para buscar tienes que rellenar algo.", AlertType.ERROR);
-            } else if (!nombre.isEmpty() && NTel != null) {
+            }
+            if (!nombre.isEmpty() && NTel != null) {
                 mostrarAlerta("Error", "Solo rellena un campo.", AlertType.ERROR);
-            } else if (nombre.isEmpty() && NTel != null) {
+            }
+            if (nombre.isEmpty() && NTel != null) {
                 socio= socioDao.findByTel(NTel);
-            } else if (!nombre.isEmpty() && NTel == null) {
+            }
+            if (!nombre.isEmpty() && NTel == null) {
                 socio = socioDao.findByNombre(nombre);
             }
             if (socio != null) {
                 tablaSocios.getItems().setAll(socio);
                 tablaSocios.getSelectionModel().select(socio);
+                listarTodosLosSocios();
             } else {
                 mostrarAlerta("Información", "No se encontraron socios con los criterios proporcionados.", AlertType.INFORMATION);
             }
