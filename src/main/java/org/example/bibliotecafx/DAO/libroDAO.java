@@ -5,6 +5,7 @@ import org.example.bibliotecafx.entities.libro;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.example.bibliotecafx.DAO.autorDao;
 
 import java.util.List;
 
@@ -137,45 +138,46 @@ public class libroDAO implements Ilibro {
     /**
      * Modifica un libro existente.
      *
-     * @param id Objeto libro con los datos actualizados.
+     * @param libro Objeto libro con los datos actualizados.
      * @return El libro modificado.
      */
     @Override
-    public libro ChangeLibro(Integer id) {
+    public libro ChangeLibro(libro libro) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
-        libro libroExistente = null;
 
         try {
             transaction = session.beginTransaction();
 
-            // Buscar el libro por su ID
-            libroExistente = session.find(libro.class, id);
+            // Verificar si el libro ya existe por su ID
+            libro libroExistente = session.find(libro.class, libro.getIdL());
             if (libroExistente == null) {
-                System.out.println("No se encontró un libro con el ID proporcionado.");
+                System.out.println("No se encontró un libro con el ID proporcionado para actualizar.");
                 return null;
             }
 
-            // Cambiar los datos en tiempo real
-            libroExistente.setTitulo("Nuevo Título"); // Cambiar el título aquí
-            libroExistente.setISBN("1234567890123"); // Cambiar el ISBN aquí
-            libroExistente.setEditorial("Nueva Editorial"); // Cambiar la editorial aquí
-            libroExistente.setAnyoPub(2023); // Cambiar el año de publicación aquí
+            // Actualizar los datos del libro existente
+            libroExistente.setTitulo(libro.getTitulo());
+            libroExistente.setISBN(libro.getISBN());
+            libroExistente.setEditorial(libro.getEditorial());
+            libroExistente.setAnyoPub(libro.getAnyoPub());
 
-            // Si es necesario cambiar el autor:
-            autorDAO autorDAO = new autorDAO();
-            autor nuevoAutor = autorDAO.findByNombre("Nombre Autor");
-            if (nuevoAutor != null) {
-                libroExistente.setAutor(nuevoAutor);
-            } else {
-                // Crear un nuevo autor si no existe
-                autor autorCreado = new autor();
-                autorCreado.setNombre("Nombre Autor");
-                autorDAO.create(autorCreado);
-                libroExistente.setAutor(autorCreado);
+            // Manejo del autor si cambia
+            autor autor = libro.getAutor();
+            if (autor != null) {
+                autorDAO autorDAO = new autorDAO();
+                autor autorExistente = autorDAO.findByNombre(autor.getNombre());
+                if (autorExistente == null) {
+                    // Crear el autor si no existe y asignarlo
+                    autorDAO.create(autor);
+                    libroExistente.setAutor(autor);
+                } else {
+                    // Asociar el autor existente
+                    libroExistente.setAutor(autorExistente);
+                }
             }
 
-            // Guardar los cambios
+            // Guardar los cambios realizados en el libro
             session.update(libroExistente);
             transaction.commit();
             System.out.println("El libro con ID " + libroExistente.getIdL() + " ha sido actualizado correctamente.");
@@ -188,7 +190,7 @@ public class libroDAO implements Ilibro {
             session.close();
         }
 
-        return libroExistente;
+        return libro;
     }
 
     /**

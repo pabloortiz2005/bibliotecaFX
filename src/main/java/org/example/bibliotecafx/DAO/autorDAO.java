@@ -93,57 +93,69 @@ public class autorDAO implements Iautor{
         }
     }
     /**
-     * @param id
+     * @param autor
      * @return Cambiar autor
      */
     @Override
-    public autor ChangeAutor(Integer id) {
+    public autor ChangeAutor(autor autor) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        autor autor4 = session.find(autor.class, id);
+        Transaction transaction = null;
 
-        if (autor4 != null) {
+        try {
+            transaction = session.beginTransaction();
 
-            System.out.println("Inserte los datos del autor que quiere modificar");
-            Scanner scanner = new Scanner(System.in);
-            Scanner scanner2 = new Scanner(System.in);
+            // Verificar si el Autor ya existe por su ID
+            autor autorExistente = session.find(autor.class, autor.getIdA());
+            if (autorExistente == null) {
+                System.out.println("No se encontró un Autor con el ID proporcionado para actualizar.");
+                return null;
+            }
 
-            System.out.print("Nombre: ");
-            autor4.setNombre(scanner.nextLine());
+            // Actualizar los datos del autor existente
+            autorExistente.setNombre(autor.getNombre());
+            autorExistente.setNacionalidad(autor.getNacionalidad());
 
-            System.out.print("Nacionalidad: ");
-            autor4.setNacionalidad(scanner.nextLine());
 
-            // Iniciar la transacción y actualizar el Autor
-            session.beginTransaction();
-            session.update(autor4);
-            session.getTransaction().commit();
-
-        } else {
-            System.out.println("No se encontró un autor con el ID especificado.");
+            // Guardar los cambios realizados en el autor
+            session.update(autorExistente);
+            transaction.commit();
+            System.out.println("El autor con ID " + autorExistente.getIdA() + " ha sido actualizado correctamente.");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
 
+        return autor;
+    }
+
+/**
+ * @param autor
+ * @return Crear autor
+ */
+
+@Override
+public autor create(autor autor) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Transaction transaction = null;
+
+    try {
+        transaction = session.beginTransaction();
+
+        session.save(autor);
+        transaction.commit();
+        System.out.println("El autor se ha creado correctamente.");
+    } catch (Exception e) {
+        if (transaction != null) transaction.rollback();
+        e.printStackTrace();
+    } finally {
         session.close();
-        return autor4;
-    }
-    /**
-     * @param autor
-     * @return Crear autor
-     */
-
-    @Override
-    public autor create(autor autor) {
-        Scanner scanner = new Scanner(System.in);
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        autor autor5 = new autor();
-
-        System.out.println("Nombre");
-        autor5.setNombre(scanner.nextLine());
-
-        System.out.println("Nacionalidad: ");
-        autor5.setNacionalidad(scanner.nextLine());
-
-        return autor5;
     }
 
+    return autor;
 }
+}
+

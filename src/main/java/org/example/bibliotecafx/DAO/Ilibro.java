@@ -12,7 +12,7 @@ public interface Ilibro {
     public List<libro> findByAutor(autor autor);
     public libro findByTitulo(String titulo);
     public void deleteById(Integer id);
-    public libro ChangeLibro(Integer id);
+    public libro ChangeLibro(libro libro);
     public libro create(libro libro);
     List<libro> buscarLibro(String titulo, String autor, String isbn);
 }
