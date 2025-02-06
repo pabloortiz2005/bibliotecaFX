@@ -48,7 +48,9 @@ public class socioDAO implements Isocio{
     public socio findByNombre(String nombre) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        socio socio3 = session.find(socio.class, nombre);
+        socio socio3 = session.createQuery("from socio where nombre = :nombre", socio.class)
+                .setParameter("nombre", nombre)
+                .uniqueResult();
 
         session.close();
 
@@ -62,7 +64,9 @@ public class socioDAO implements Isocio{
     public socio findByTel(Integer nTel) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        socio socio4 = session.find(socio.class, nTel);
+        socio socio4 = session.createQuery("from socio where nTel = :nTel", socio.class)
+                .setParameter("nTel", nTel)
+                .uniqueResult();
 
         session.close();
 

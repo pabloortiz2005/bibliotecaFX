@@ -24,7 +24,6 @@
             <Label text="Buscar por:" />
             <TextField fx:id="NombreBuscar" promptText="Nombre" />
             <TextField fx:id="NTelBuscar" promptText="N Telefono" />
-            <TextField fx:id="IdBuscar" promptText="id" />
             <Button text="Buscar" onAction="#buscarSocio" />
         </HBox>
 

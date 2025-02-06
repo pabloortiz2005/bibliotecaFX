@@ -11,6 +11,12 @@ import org.example.bibliotecafx.entities.socio;
 import java.util.List;
 
 public class SocioController {
+    @FXML
+    public TextField NombreBuscar;
+
+    @FXML
+    public TextField NTelBuscar;
+
 
     @FXML
     private TableView<socio> tablaSocios;
@@ -83,9 +89,19 @@ public class SocioController {
     @FXML
     private void buscarSocio() {
         String nombre = nombreBuscar.getText().trim();
+        Integer NTel = Integer.valueOf(NTelBuscar.getText().trim());
         socio socio = new socio();
         try {
-            socio = socioDao.findByNombre(nombre);
+
+            if (nombre.isEmpty() && NTel == null) {
+                mostrarAlerta("Error", "Para buscar tienes que rellenar algo.", AlertType.ERROR);
+            } else if (!nombre.isEmpty() && NTel != null) {
+                mostrarAlerta("Error", "Solo rellena un campo.", AlertType.ERROR);
+            } else if (nombre.isEmpty() && NTel != null) {
+                socio= socioDao.findByTel(NTel);
+            } else if (!nombre.isEmpty() && NTel == null) {
+                socio = socioDao.findByNombre(nombre);
+            }
             if (socio != null) {
                 tablaSocios.getItems().setAll(socio);
                 tablaSocios.getSelectionModel().select(socio);
