@@ -150,21 +150,22 @@ public class socioDAO implements Isocio{
 
     @Override
     public socio create(socio socio) {
-        Scanner scanner = new Scanner(System.in);
-        Scanner scanner2 = new Scanner(System.in);
         Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
 
-        socio socio6 = new socio();
+        try {
+            transaction = session.beginTransaction();
 
-        System.out.println("Nombre");
-        socio6.setNombre(scanner.nextLine());
+            session.save(socio);
+            transaction.commit();
+            System.out.println("El autor se ha creado correctamente.");
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
 
-        System.out.println("Direccion: ");
-        socio6.setDireccion(scanner.nextLine());
-
-        System.out.println("Numero de telefono: ");
-        socio6.setnTel(scanner2.nextInt());
-
-        return socio6;
+        return socio;
     }
 }

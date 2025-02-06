@@ -62,13 +62,14 @@ public class SocioController {
         String direccion = dialog.showAndWait().orElse(null);
 
         dialog.setContentText("Numero de telefono:");
-        Integer NTel = Integer.parseInt(dialog.showAndWait().orElse(null));
+        String NTel =dialog.showAndWait().orElse(null);
+
         // Guardar en la base de datos
         try {
             socio nuevoSocio = new socio();
             nuevoSocio.setNombre(nombre);
             nuevoSocio.setDireccion(direccion);
-            nuevoSocio.setnTel(NTel);
+            nuevoSocio.setnTel(Integer.valueOf(NTel));
 
             socioDao.create(nuevoSocio);
             listarTodosLosSocios();
@@ -117,10 +118,10 @@ public class SocioController {
         String direccion = dialog.showAndWait().orElse(null);
 
         dialog.setContentText("Numero de telefono:");
-        Integer NTel = Integer.valueOf(dialog.showAndWait().orElse(null));
+        String NTel =dialog.showAndWait().orElse(null);
 
         // Editar el socio
-        socioDao.ChangeSocio(socioSeleccionado,nombre,direccion,NTel);
+        socioDao.ChangeSocio(socioSeleccionado,nombre,direccion, Integer.valueOf(NTel));
         listarTodosLosSocios();
     }
 

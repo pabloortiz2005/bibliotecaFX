@@ -13,13 +13,13 @@ public class socio implements Serializable {
 
     String nombre;
     String direccion;
-    int nTel;
+    Integer nTel;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idS;
 
-    public socio(String nombre, String direccion, int nTel) {
+    public socio(String nombre, String direccion, Integer nTel) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.nTel = nTel;
@@ -44,7 +44,7 @@ public class socio implements Serializable {
         this.direccion = direccion;
     }
 
-    public int getnTel() {
+    public Integer getnTel() {
         return nTel;
     }
 
@@ -56,7 +56,7 @@ public class socio implements Serializable {
         return idS;
     }
 
-    public void setIdS(int idS) {
+    public void setIdS(Integer idS) {
         this.idS = idS;
     }
 

@@ -26,7 +26,6 @@
             <TextField fx:id="NTelBuscar" promptText="N Telefono" />
             <TextField fx:id="IdBuscar" promptText="id" />
             <Button text="Buscar" onAction="#buscarSocio" />
-            <Button text="Listar Socio Disponibles" onAction="#listarTodosLosSocios" />
         </HBox>
 
         <!-- Botones de acciones -->
@@ -37,7 +36,7 @@
         </HBox>
 
         <!-- Tabla de resultados -->
-        <TableView fx:id="tablaLibros" prefHeight="355.0" prefWidth="876.0">
+        <TableView fx:id="tablaSocios" prefHeight="355.0" prefWidth="876.0">
             <columns>
                 <TableColumn fx:id="colId" prefWidth="50" text="ID" />
                 <TableColumn fx:id="colNombre" prefWidth="200" text="Nombre" />
