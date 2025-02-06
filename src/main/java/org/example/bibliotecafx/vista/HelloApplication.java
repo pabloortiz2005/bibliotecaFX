@@ -13,8 +13,10 @@ public class HelloApplication extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/bibliotecafx/Inicio.fxml"));
             Scene scene = new Scene(loader.load(), 916, 690); // Configurar tamaño si es necesario
             primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
             primaryStage.setTitle("BibliotecaFX");
             primaryStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
