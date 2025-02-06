@@ -1,10 +1,14 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class prestamo {
+import java.io.Serializable;
+
+@Entity
+public class prestamo implements Serializable {
     // préstamos de libros a socios, especificando la fecha de préstamo y la fecha de devolución
 
     libro libroP;
@@ -18,12 +22,11 @@ public class prestamo {
 
     boolean finalizado=false;
 
-    public prestamo(String fD, String fP, socio socioP, libro libroP, Integer idP, boolean finalizado) {
+    public prestamo(String fD, String fP, socio socioP, libro libroP, boolean finalizado) {
         this.fD = fD;
         this.fP = fP;
         this.socioP = socioP;
         this.libroP = libroP;
-        this.idP = idP;
         this.finalizado = finalizado;
     }
 

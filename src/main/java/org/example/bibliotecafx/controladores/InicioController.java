@@ -28,7 +28,6 @@ public class InicioController {
     /**
      * Manejar la navegación al módulo "Gestión de Libros".
      *
-     * @param event El evento de acción que disparó la navegación.
      */
     @FXML
     private void manejarGestionLibros(ActionEvent event) {
@@ -39,18 +38,16 @@ public class InicioController {
     /**
      * Manejar la navegación al módulo "Gestión de Autores".
      *
-     * @param event El evento de acción que disparó la navegación.
      */
     @FXML
     private void manejarGestionAutores(ActionEvent event) {
         System.out.println("Botón 'Gestion Autores' presionado");
-        cambiarEscena("/org/example/bibliotecafx/AutoresP.fxml", event);
+        cambiarEscena("/org/example/bibliotecafx/AutorP.fxml", event);
     }
 
     /**
      * Manejar la navegación al módulo "Gestión de Socios".
      *
-     * @param event El evento de acción que disparó la navegación.
      */
     @FXML
     private void manejarGestionSocios(ActionEvent event) {
@@ -61,7 +58,6 @@ public class InicioController {
     /**
      * Manejar la navegación al módulo "Gestión de Préstamos".
      *
-     * @param event El evento de acción que disparó la navegación.
      */
     @FXML
     private void manejarGestionPrestamos(ActionEvent event) {
@@ -72,8 +68,6 @@ public class InicioController {
     /**
      * Método genérico para cambiar la escena actual por una nueva.
      *
-     * @param rutaFXML La ruta relativa al archivo FXML de la nueva vista, desde `resources`.
-     * @param event    El evento de acción que disparó el cambio.
      */
     private void cambiarEscena(String rutaFXML, ActionEvent event) {
         try {

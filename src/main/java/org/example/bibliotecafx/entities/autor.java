@@ -1,10 +1,14 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class autor {
+import java.io.Serializable;
+
+@Entity
+public class autor implements Serializable {
 // nombre , nacionalidad e id
 
     @Id
@@ -15,10 +19,10 @@ public class autor {
     String nacionalidad;
 
 
-    public autor(String nombre, String nacionalidad, Integer idA) {
+    public autor(String nombre, String nacionalidad) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
-        this.idA = idA;
+
     }
 
     public autor() {
@@ -40,7 +44,7 @@ public class autor {
         this.nacionalidad = nacionalidad;
     }
 
-    public int getIdA() {
+    public Integer getIdA() {
         return idA;
     }
 

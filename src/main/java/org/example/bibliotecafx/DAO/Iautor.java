@@ -10,7 +10,7 @@ public interface Iautor {
     public autor findById(Integer id);
     public autor findByNombre(String nombre);
     public void deleteById(Integer id);
-    public autor ChangeAutor(autor autor);
+    public autor ChangeAutor(autor autor,  String nombre, String nacionalidad);
     public autor create(autor autor);
 
 }

@@ -11,8 +11,6 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"/>
 
-
-
         <!-- Echo all executed SQL to stdout -->
         <property name="hibernate.show_sql">true</property>
 
@@ -23,11 +21,10 @@
         <property name="hibernate.format_sql">true</property>
 
 
-
-        <mapping class="org.example.entities.libro"/>
-        <mapping class="org.example.entities.autor"/>
-        <mapping class="org.example.entities.socio"/>
-        <mapping class="org.example.entities.prestamo"/>
+        <mapping class="org.example.bibliotecafx.entities.libro"/>
+        <mapping class="org.example.bibliotecafx.entities.autor"/>
+        <mapping class="org.example.bibliotecafx.entities.socio"/>
+        <mapping class="org.example.bibliotecafx.entities.prestamo"/>
     </session-factory>
 
 </hibernate-configuration>

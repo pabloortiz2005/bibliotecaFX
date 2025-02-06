@@ -25,6 +25,8 @@ public class AutorController {
     @FXML
     private TableColumn<autor, String> colNacionalidad;
 
+    @FXML
+    public TextField nombreBuscar;
 
     private final autorDAO autorDAO;
 
@@ -44,7 +46,7 @@ public class AutorController {
     // Crear un nuevo autor
     @FXML
     private void crearNuevoAutor() {
-        // Pedir al usuario los datos del libro
+        // Pedir al usuario los datos del autor
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Añadir Nuevo Autor");
         dialog.setHeaderText("Introduce los datos del nuevo Autor:");
@@ -54,8 +56,6 @@ public class AutorController {
 
         dialog.setContentText("Nacionalidad:");
         String nacionalidad = dialog.showAndWait().orElse(null);
-
-        dialog.setContentText("Editorial:");
         // Guardar en la base de datos
         try {
             autor nuevoAutor = new autor();
@@ -74,10 +74,10 @@ public class AutorController {
     @FXML
     private void buscarAutor() {
         String nombre = nombreBuscar.getText().trim();
-
+        autor autor = new autor();
         try {
-            List<autor> autor = autorDAO.findByNombre(nombre);
-            if (!autor.isEmpty()) {
+            autor = autorDAO.findByNombre(nombre);
+            if (autor != null) {
                 tablaAutores.getItems().setAll(autor);
             } else {
                 mostrarAlerta("Información", "No se encontraron autores con los criterios proporcionados.", AlertType.INFORMATION);
@@ -91,6 +91,9 @@ public class AutorController {
     // Editar un autor seleccionado
     @FXML
     private void editarAutorSeleccionado() {
+
+        TextInputDialog dialog = new TextInputDialog();
+
         autor autorSeleccionado = tablaAutores.getSelectionModel().getSelectedItem();
 
         if (autorSeleccionado == null) {
@@ -98,8 +101,14 @@ public class AutorController {
             return;
         }
 
+        dialog.setContentText("Nombre:");
+        String nombre = dialog.showAndWait().orElse(null);
+
+        dialog.setContentText("Nacionalidad:");
+        String nacionalidad = dialog.showAndWait().orElse(null);
         // Editar el libro
-        crearNuevoAutor();
+        autorDAO.ChangeAutor(autorSeleccionado,nombre,nacionalidad);
+        listarTodosLosAutores();
     }
 
     // Eliminar un autor seleccionado
@@ -128,7 +137,7 @@ public class AutorController {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-
+    @FXML
     private void listarTodosLosAutores() {
         try {
             List<autor> autor = autorDAO.findAll();

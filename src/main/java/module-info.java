@@ -21,4 +21,7 @@ module org.example.bibliotecafx {
     exports org.example.bibliotecafx.entities;
     exports org.example.bibliotecafx.util;
     exports org.example.bibliotecafx.vista;
+
+
+
 }

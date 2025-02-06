@@ -1,10 +1,14 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class libro {
+import java.io.Serializable;
+
+@Entity
+public class libro implements Serializable {
     // título, ISBN, autor, editorial y año de publicación
     String titulo;
     String ISBN;
@@ -16,13 +20,12 @@ public class libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idL;
 
-    public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub, Integer idL) {
+    public libro(String titulo, String ISBN, org.example.bibliotecafx.entities.autor autor, String editorial, int anyoPub) {
         this.titulo = titulo;
         this.ISBN = ISBN;
         this.autor = autor;
         this.editorial = editorial;
         this.anyoPub = anyoPub;
-        this.idL = idL;
     }
 
     public libro() {

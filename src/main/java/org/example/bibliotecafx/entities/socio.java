@@ -1,10 +1,14 @@
 package org.example.bibliotecafx.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class socio {
+import java.io.Serializable;
+
+@Entity
+public class socio implements Serializable {
     // nombre, dirección y número de teléfono
 
     String nombre;
@@ -15,11 +19,10 @@ public class socio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idS;
 
-    public socio(String nombre, String direccion, int nTel, Integer idS) {
+    public socio(String nombre, String direccion, int nTel) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.nTel = nTel;
-        this.idS = idS;
     }
 
     public socio() {

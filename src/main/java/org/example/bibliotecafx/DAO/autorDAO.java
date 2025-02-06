@@ -97,23 +97,18 @@ public class autorDAO implements Iautor{
      * @return Cambiar autor
      */
     @Override
-    public autor ChangeAutor(autor autor) {
+    public autor ChangeAutor(autor autor, String nombre, String nacionalidad) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
         try {
             transaction = session.beginTransaction();
 
-            // Verificar si el Autor ya existe por su ID
             autor autorExistente = session.find(autor.class, autor.getIdA());
-            if (autorExistente == null) {
-                System.out.println("No se encontró un Autor con el ID proporcionado para actualizar.");
-                return null;
-            }
 
             // Actualizar los datos del autor existente
-            autorExistente.setNombre(autor.getNombre());
-            autorExistente.setNacionalidad(autor.getNacionalidad());
+            autorExistente.setNombre(nombre);
+            autorExistente.setNacionalidad(nacionalidad);
 
 
             // Guardar los cambios realizados en el autor
