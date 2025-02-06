@@ -70,7 +70,7 @@ public class socioDAO implements Isocio{
     }
     /**
      * @param id
-     * @return borra un libro segun id
+     * @return borra un socio segun id
      */
     @Override
     public void deleteById(Integer id) {
@@ -109,41 +109,39 @@ public class socioDAO implements Isocio{
         }
     }
     /**
-     * @param id
-     * @return Cambiar autor
+     * @param socio
+     * @return Cambiar socio
      */
     @Override
-    public socio ChangeSocio(Integer id) {
+    public socio ChangeSocio(socio socio, String nombre,String direccion, Integer NTel) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        socio socio5 = session.find(socio.class, id);
+        Transaction transaction = null;
 
-        if (socio5 != null) {
+        try {
+            transaction = session.beginTransaction();
+
+            socio socioExistente = session.find(socio.class, socio.getIdS());
+
+            // Actualizar los datos del socio existente
+            socioExistente.setNombre(nombre);
+            socioExistente.setDireccion(direccion);
+            socioExistente.setnTel(NTel);
 
 
-            System.out.println("Inserte los datos del socio5 que quiere modificar");
-            Scanner scanner = new Scanner(System.in);
-            Scanner scanner2 = new Scanner(System.in);
-
-            System.out.print("Nombre: ");
-            socio5.setNombre(scanner.nextLine());
-
-            System.out.print("Dirección: ");
-            socio5.setDireccion(scanner.nextLine());
-
-            System.out.print("Numero de telefono: ");
-            socio5.setnTel(scanner2.nextInt());
-
-            // Iniciar la transacción y actualizar el Autor
-            session.beginTransaction();
-            session.update(socio5);
-            session.getTransaction().commit();
-
-        } else {
-            System.out.println("No se encontró un socio con el ID especificado.");
+            // Guardar los cambios realizados en el socio
+            session.update(socioExistente);
+            transaction.commit();
+            System.out.println("El autor con ID " + socioExistente.getIdS() + " ha sido actualizado correctamente.");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
 
-        session.close();
-        return socio5;
+        return socio;
     }
     /**
      * @param socio

@@ -40,7 +40,7 @@ public class AutorController {
         colId.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getIdA()));
         colNombre.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getNombre()));
         colNacionalidad.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getNacionalidad()));
-        listarTodosLosAutores(); // Cargar todos los libros al iniciar
+        listarTodosLosAutores(); // Cargar todos los Autores al iniciar
     }
 
     // Crear un nuevo autor
@@ -70,7 +70,7 @@ public class AutorController {
         }
     }
 
-    // Buscar libros por nombre
+    // Buscar socios por nombre
     @FXML
     private void buscarAutor() {
         String nombre = nombreBuscar.getText().trim();
@@ -107,7 +107,7 @@ public class AutorController {
 
         dialog.setContentText("Nacionalidad:");
         String nacionalidad = dialog.showAndWait().orElse(null);
-        // Editar el libro
+        // Editar el autor
         autorDAO.ChangeAutor(autorSeleccionado,nombre,nacionalidad);
         listarTodosLosAutores();
     }

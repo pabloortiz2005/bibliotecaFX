@@ -52,7 +52,7 @@ public class InicioController {
     @FXML
     private void manejarGestionSocios(ActionEvent event) {
         System.out.println("Botón 'Gestion Socios' presionado");
-        cambiarEscena("/org/example/bibliotecafx/SociosP.fxml", event);
+        cambiarEscena("/org/example/bibliotecafx/SocioP.fxml", event);
     }
 
     /**

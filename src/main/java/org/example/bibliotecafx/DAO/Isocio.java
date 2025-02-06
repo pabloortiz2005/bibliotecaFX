@@ -13,6 +13,6 @@ public interface Isocio {
     public socio findByNombre(String nombre);
     public socio findByTel(Integer nTel);
     public void deleteById(Integer id);
-    public socio ChangeSocio(Integer id);
+    public socio ChangeSocio(socio socio,  String nombre, String direccion, Integer NTel);
     public socio create(socio socio);
 }
