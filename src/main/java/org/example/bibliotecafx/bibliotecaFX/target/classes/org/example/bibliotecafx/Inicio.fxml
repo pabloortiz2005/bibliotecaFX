@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="690.0" prefWidth="916.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bibliotecafx.controladores.InicioController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <children>
+      <HBox prefHeight="120.0" prefWidth="876.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="BOTTOM" prefHeight="120.0" prefWidth="876.0" text="BibliotecaFX" textFill="RED">
+               <font>
+                  <Font name="Centaur" size="83.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox layoutX="30.0" layoutY="295.0" prefHeight="644.0" prefWidth="876.0">
+         <children>
+            <Button fx:id="btnGestionLibros" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0" text="Gestion Libros"
+                    onAction="#manejarGestionLibros" />
+            <Button fx:id="btnGestionAutores" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0"
+                    text="Gestion Autores" onAction="#manejarGestionAutores" />
+            <Button fx:id="btnGestionSocios" layoutX="448.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0"
+                    text="Gestion Socios" onAction="#manejarGestionSocios" />
+            <Button fx:id="btnGestionPrestamos" layoutX="594.0" layoutY="10.0" mnemonicParsing="false" prefHeight="528.0" prefWidth="948.0"
+                    text="Gestion Prestamos" onAction="#manejarGestionPrestamos" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
