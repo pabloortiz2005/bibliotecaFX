@@ -1,0 +1,4 @@
+autor(-idA-, nombre, nacionalidad)
+libro(-idL-, titulo, ISBN, autor_id, editorial, anyoPub)
+socio(-idS-, nombre, direccion, nTel)
+prestamo(-idP-, libro_id, socio_id, fP, fD, finalizado)
