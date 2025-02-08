@@ -2,6 +2,7 @@ package org.example.bibliotecafx.DAO;
 
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
+import org.example.bibliotecafx.entities.socio;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -46,7 +47,9 @@ public class autorDAO implements Iautor{
     public autor findByNombre(String nombre) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        autor autor3 = session.find(autor.class, nombre);
+        autor autor3 = session.createQuery("from autor where nombre = :nombre", autor.class)
+                .setParameter("nombre", nombre)
+                .uniqueResult();
 
         session.close();
 

@@ -1,14 +1,19 @@
 package org.example.bibliotecafx.controladores;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import org.example.bibliotecafx.DAO.autorDAO;
 import org.example.bibliotecafx.DAO.libroDAO;
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
 
+import java.io.IOException;
 import java.util.List;
 
 public class AutorController {
@@ -74,19 +79,30 @@ public class AutorController {
     @FXML
     private void buscarAutor() {
         String nombre = nombreBuscar.getText().trim();
-        autor autor = new autor();
+
         try {
-            autor = autorDAO.findByNombre(nombre);
+
+            if (nombre.isEmpty()) {
+                mostrarAlerta("Error", "Debes rellenar el campo para buscar un autor.", AlertType.ERROR);
+                return;
+            }
+
+
+            autor autor = autorDAO.findByNombre(nombre);
+
             if (autor != null) {
-                tablaAutores.getItems().setAll(autor);
+                // Mostrar el autor encontrado en la tabla
+                tablaAutores.getItems().setAll(List.of(autor));
                 tablaAutores.getSelectionModel().select(autor);
             } else {
-                mostrarAlerta("Información", "No se encontraron autores con los criterios proporcionados.", AlertType.INFORMATION);
+                mostrarAlerta("Información", "No se encontró ningún autor con el nombre proporcionado.", AlertType.INFORMATION);
             }
         } catch (Exception e) {
-            mostrarAlerta("Error", "Hubo un error al buscar autores. Detalles:\n" + e.getMessage(), AlertType.ERROR);
+            mostrarAlerta("Error", "Hubo un error al buscar el autor. Detalles: " + e.getMessage(), AlertType.ERROR);
+            e.printStackTrace();
         }
     }
+
 
 
     // Editar un autor seleccionado
@@ -147,4 +163,37 @@ public class AutorController {
             mostrarAlerta("Error", "No se pudieron listar los autores.", AlertType.ERROR);
         }
     }
+    @FXML
+    public void Volver(ActionEvent event) {
+        System.out.println("Botón 'volver' presionado");
+        cambiarEscena("/org/example/bibliotecafx/Inicio.fxml", event);
+    }
+
+    // Método para cambiar de escena
+    @FXML
+    private void cambiarEscena(String rutaFXML, ActionEvent event) {
+        try {
+            // Cargar el archivo FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
+            Scene nuevaEscena = new Scene(loader.load());
+
+            // Obtener la ventana actual (Stage)
+            Stage stageActual = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            // Establecer la nueva escena
+            stageActual.setScene(nuevaEscena);
+            stageActual.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarError("No se pudo cargar la vista solicitada: " + rutaFXML);
+        }
+    }
+    @FXML
+    private void mostrarError(String mensaje) {
+        Alert alerta = new Alert(AlertType.ERROR);
+        alerta.setTitle("Error");
+        alerta.setHeaderText("Ocurrió un error");
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
+    }
+
 }

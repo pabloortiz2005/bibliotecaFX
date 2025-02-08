@@ -1,9 +1,6 @@
 package org.example.bibliotecafx.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
@@ -11,8 +8,16 @@ import java.io.Serializable;
 public class prestamo implements Serializable {
     // préstamos de libros a socios, especificando la fecha de préstamo y la fecha de devolución
 
-    libro libroP;
-    socio socioP;
+
+    //para la relacion
+    @ManyToOne
+    @JoinColumn(name = "libro_id", nullable = false)
+    private libro libroP;
+
+    @ManyToOne
+    @JoinColumn(name = "socio_id", nullable = false)
+    private socio socioP;
+
     String fP;
     String fD;
 

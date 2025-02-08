@@ -32,6 +32,7 @@
             <Button fx:id="btnCrear" text="Añadir Socio" onAction="#crearNuevoSocio" />
             <Button fx:id="btnEditar" text="Editar Socio Seleccionado" onAction="#editarSocioSeleccionado" />
             <Button fx:id="btnEliminar" text="Eliminar Socio Seleccionado" onAction="#eliminarSocioSeleccionado" />
+            <Button fx:id="btnListar" text="Listar todos los socios" onAction="#listarTodosLosSocios" />
         </HBox>
 
         <!-- Tabla de resultados -->
@@ -44,5 +45,6 @@
 
             </columns>
         </TableView>
+        <Button fx:id="btnVolver" text="Volver" onAction="#Volver" />
     </children>
 </VBox>

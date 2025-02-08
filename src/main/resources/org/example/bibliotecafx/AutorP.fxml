@@ -19,6 +19,7 @@
             </font>
         </Label>
 
+
         <!-- Formulario para búsqueda -->
         <HBox alignment="CENTER" spacing="10">
             <Label text="Buscar por:" />
@@ -31,6 +32,7 @@
             <Button fx:id="btnCrear" text="Añadir Autor" onAction="#crearNuevoAutor" />
             <Button fx:id="btnEditar" text="Editar Autor Seleccionado" onAction="#editarAutorSeleccionado" />
             <Button fx:id="btnEliminar" text="Eliminar Autor Seleccionado" onAction="#eliminarAutorSeleccionado" />
+            <Button fx:id="btnListar" text="Listar todos los Autores" onAction="#listarTodosLosAutores" />
         </HBox>
 
         <!-- Tabla de resultados -->
@@ -41,5 +43,6 @@
                 <TableColumn fx:id="colNacionalidad" prefWidth="150" text="Nacionalidad" />
             </columns>
         </TableView>
+        <Button fx:id="btnVolver" text="Volver" onAction="#Volver" />
     </children>
 </VBox>

@@ -1,13 +1,18 @@
 package org.example.bibliotecafx.controladores;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import org.example.bibliotecafx.DAO.socioDAO;
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.socio;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SocioController {
@@ -88,32 +93,48 @@ public class SocioController {
     // Buscar socios por nombre
     @FXML
     private void buscarSocio() {
-        String nombre = nombreBuscar.getText().trim();
-        Integer NTel = Integer.valueOf(NTelBuscar.getText().trim());
-        socio socio = new socio();
-        try {
+        String nombre = NombreBuscar.getText().trim();
+        String nTelStr = NTelBuscar.getText().trim();
 
-            if (nombre.isEmpty() && NTel == null) {
-                mostrarAlerta("Error", "Para buscar tienes que rellenar algo.", AlertType.ERROR);
+        try {
+            // Validar entradas del usuario
+            if (nombre.isEmpty() && nTelStr.isEmpty()) {
+                mostrarAlerta("Error", "Debes rellenar al menos un campo para buscaer.", AlertType.ERROR);
+                return;
             }
-            if (!nombre.isEmpty() && NTel != null) {
-                mostrarAlerta("Error", "Solo rellena un campo.", AlertType.ERROR);
+
+            if (!nombre.isEmpty() && !nTelStr.isEmpty()) {
+                mostrarAlerta("Error", "Por favor, rellena solo un campo para buscar.", AlertType.ERROR);
+                return;
             }
-            if (nombre.isEmpty() && NTel != null) {
-                socio= socioDao.findByTel(NTel);
-            }
-            if (!nombre.isEmpty() && NTel == null) {
-                socio = socioDao.findByNombre(nombre);
-            }
-            if (socio != null) {
-                tablaSocios.getItems().setAll(socio);
-                tablaSocios.getSelectionModel().select(socio);
-                listarTodosLosSocios();
-            } else {
-                mostrarAlerta("Información", "No se encontraron socios con los criterios proporcionados.", AlertType.INFORMATION);
+
+
+            if (!nombre.isEmpty()) {
+                socio socio = socioDao.findByNombre(nombre);
+                if (socio != null) {
+                    tablaSocios.getItems().setAll(List.of(socio));
+                    tablaSocios.getSelectionModel().select(socio);
+                } else {
+                    mostrarAlerta("Información", "No se encontraron socios con el nombre proporcionado.", AlertType.INFORMATION);
+                }
+            } else if (!nTelStr.isEmpty()) {
+
+                try {
+                    Integer nTel = Integer.parseInt(nTelStr);
+                    socio socio = socioDao.findByTel(nTel);
+                    if (socio != null) {
+                        tablaSocios.getItems().setAll(List.of(socio));
+                        tablaSocios.getSelectionModel().select(socio);
+                    } else {
+                        mostrarAlerta("Información", "No se encontraron socios con el número de teléfono proporcionado.", AlertType.INFORMATION);
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "El número de teléfono debe ser válido.", AlertType.ERROR);
+                }
             }
         } catch (Exception e) {
-            mostrarAlerta("Error", "Hubo un error al buscar socios. Detalles:\n" + e.getMessage(), AlertType.ERROR);
+            mostrarAlerta("Error", "Hubo un error al realizar la búsqueda. Detalles: " + e.getMessage(), AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 
@@ -179,5 +200,37 @@ public class SocioController {
         } catch (Exception e) {
             mostrarAlerta("Error", "No se pudieron listar los socios.", AlertType.ERROR);
         }
+    }
+    @FXML
+    public void Volver(ActionEvent event) {
+        System.out.println("Botón 'volver' presionado");
+        cambiarEscena("/org/example/bibliotecafx/Inicio.fxml", event);
+    }
+
+    // Método para cambiar de escena
+    @FXML
+    private void cambiarEscena(String rutaFXML, ActionEvent event) {
+        try {
+            // Cargar el archivo FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
+            Scene nuevaEscena = new Scene(loader.load());
+
+            // Obtener la ventana actual (Stage)
+            Stage stageActual = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            // Establecer la nueva escena
+            stageActual.setScene(nuevaEscena);
+            stageActual.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarError("No se pudo cargar la vista solicitada: " + rutaFXML);
+        }
+    }
+    @FXML
+    private void mostrarError(String mensaje) {
+        Alert alerta = new Alert(AlertType.ERROR);
+        alerta.setTitle("Error");
+        alerta.setHeaderText("Ocurrió un error");
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }
