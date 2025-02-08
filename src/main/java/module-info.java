@@ -7,7 +7,6 @@ module org.example.bibliotecafx {
     requires org.hibernate.orm.core;
     requires jakarta.persistence;
     requires java.naming;
-    requires java.desktop;
 
     // Abre los paquetes para que puedan ser accedidos en tiempo de ejecución
     opens org.example.bibliotecafx.controladores to javafx.fxml;
