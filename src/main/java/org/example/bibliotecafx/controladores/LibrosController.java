@@ -122,19 +122,33 @@ public class LibrosController {
     // Buscar libros por criterios de búsqueda: título, autor o ISBN
     @FXML
     private void buscarLibro() {
+
         String titulo = tituloBuscar.getText().trim();
         String autor = autorBuscar.getText().trim();
         String isbn = isbnBuscar.getText().trim();
 
         try {
+
+            if (titulo.isEmpty() && autor.isEmpty() && isbn.isEmpty()) {
+                mostrarAlerta("Error", "Debes rellenar al menos un campo para realizar una búsqueda.", Alert.AlertType.ERROR);
+                return;
+            }
+
+
             List<libro> libros = libroDAO.buscarLibro(titulo, autor, isbn);
+
+
             if (!libros.isEmpty()) {
+
                 tablaLibros.getItems().setAll(libros);
             } else {
-                mostrarAlerta("Información", "No se encontraron libros con los criterios proporcionados.", AlertType.INFORMATION);
+
+                mostrarAlerta("Información", "No se encontraron libros con los criterios proporcionados.", Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
-            mostrarAlerta("Error", "Hubo un error al buscar libros. Detalles:\n" + e.getMessage(), AlertType.ERROR);
+
+            mostrarAlerta("Error", "Hubo un error al buscar los libros. Detalles:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="690.0" prefWidth="916.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bibliotecafx.controladores.PrestamoController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <children>
+
+        <!-- Título -->
+        <Label text="Gestión de Prestamos" textFill="RED">
+            <font>
+                <Font name="Verdana Bold" size="36" />
+            </font>
+        </Label>
+
+        <!-- Formulario para búsqueda -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Buscar por:" />
+            <TextField fx:id="socioBuscar" promptText="Título" />
+            <Button text="Buscar por Socio" onAction="#listarTodosLosPrestamosDeUnSocio"/>
+            <Button fx:id="btnListarP" text="Listar todos los prestamos" onAction="#listarTodosLosPrestamos" />
+        </HBox>
+
+        <!-- Botones de acciones -->
+        <HBox alignment="CENTER" spacing="10">
+            <Button fx:id="btnCrear" text="Añadir Prestasmo" onAction="#crearNuevoPrestamo" />
+            <Button fx:id="btnDevolver" text="Devolver Libro" onAction="#devolverLibro" />
+            <Button fx:id="btnListarPA" text="Listar todos los prestamos activos" onAction="#listarTodosLosPrestamosActivos" />
+
+        </HBox>
+
+        <!-- Tabla de resultados -->
+        <TableView fx:id="tablaPrestamo" prefHeight="355.0" prefWidth="876.0">
+            <columns>
+                <TableColumn fx:id="colId" prefWidth="50" text="ID" />
+                <TableColumn fx:id="colLibro" prefWidth="200" text="Libro" />
+                <TableColumn fx:id="colSocio" prefWidth="150" text="Socio" />
+                <TableColumn fx:id="colFechaInicio" prefWidth="150" text="F Inicio" />
+                <TableColumn fx:id="colFechaDev" prefWidth="150" text="F Devolucion" />
+                <TableColumn fx:id="Activo" prefWidth="150" text="Estado" />
+
+            </columns>
+        </TableView>
+        <Button fx:id="btnVolver" text="Volver" onAction="#Volver" />
+    </children>
+</VBox>

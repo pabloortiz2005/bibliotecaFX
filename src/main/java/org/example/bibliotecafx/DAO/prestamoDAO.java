@@ -7,6 +7,7 @@ import org.example.bibliotecafx.entities.prestamo;
 import org.example.bibliotecafx.entities.socio;
 import org.example.bibliotecafx.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.Scanner;
@@ -60,14 +61,11 @@ public class prestamoDAO implements Iprestamo{
     @Override
     public List<prestamo> findBySocio(socio socio) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        List<prestamo> prestamo3 = session.createQuery("from prestamo where socio = :socio", prestamo.class)
+        List<socio> prestamosSocio = session.createQuery("FROM prestamo WHERE socio = :socio", prestamo.class)
                 .setParameter("socio", socio)
                 .list();
-
         session.close();
-
-        return prestamo3;
+        return prestamosSocio;
     }
     @Override
     /**
@@ -100,42 +98,50 @@ public class prestamoDAO implements Iprestamo{
      */
     @Override
     public prestamo create(prestamo prestamo) {
-
-        libroDAO libroDAO = new libroDAO();
-        socioDAO socioDAO = new socioDAO();
-
-        Scanner scanner = new Scanner(System.in);
-        Scanner scanner2 = new Scanner(System.in);
         Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
 
-        prestamo prestamo5 = new prestamo();
+        try {
+            transaction = session.beginTransaction();
 
-        System.out.print("Titulo del libro: ");
-        String titulo = scanner.nextLine();
-        libro libro = libroDAO.findByISBN(titulo);
+            // Instancias de DAO para verificar la existencia de libro y socio
+            libroDAO libroDAO = new libroDAO();
+            socioDAO socioDAO = new socioDAO();
 
-        if (libro != null) {
-            prestamo5.setLibroP(libro);
-        } else {
-            System.out.println("No se encontró un libro con ese titulo.");
+            // Verificar si el libro existe
+            libro libro = prestamo.getLibroP();
+            if (libro != null) {
+                libro libroExistente = libroDAO.findByTitulo(libro.getTitulo());
+                if (libroExistente == null) {
+                    System.out.println("No se encontró un libro con ese título.");
+                    return null;
+                } else {
+                    prestamo.setLibroP(libroExistente);
+                }
+            }
+
+            // Verificar si el socio existe
+            socio socio = prestamo.getSocioP();
+            if (socio != null) {
+                socio socioExistente = socioDAO.findByNombre(socio.getNombre());
+                if (socioExistente == null) {
+                    System.out.println("No se encontró un socio con ese nombre.");
+                    return null;
+                } else {
+                    prestamo.setSocioP(socioExistente);
+                }
+            }
+            session.save(prestamo);
+            transaction.commit();
+            System.out.println("El préstamo se ha creado correctamente.");
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
 
-        System.out.print("Nombre del socio: ");
-        String nombre = scanner.nextLine();
-        socio socio = socioDAO.findByNombre(nombre);
-
-        if (socio != null) {
-            prestamo5.setSocioP(socio);
-        } else {
-            System.out.println("No se encontró un socio con ese nombre.");
-        }
-
-        System.out.print("Fecha de inicio: ");
-        prestamo5.setfP(scanner.nextLine());
-        System.out.print("Fecha de finalizacion");
-        prestamo5.setfD(scanner.nextLine());
-
-        return prestamo5;
+        return prestamo;
     }
 
 

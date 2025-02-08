@@ -3,6 +3,7 @@ package org.example.bibliotecafx.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 public class prestamo implements Serializable {
@@ -18,8 +19,8 @@ public class prestamo implements Serializable {
     @JoinColumn(name = "socio_id", nullable = false)
     private socio socioP;
 
-    String fP;
-    String fD;
+    LocalDate fP;
+    LocalDate fD;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class prestamo implements Serializable {
 
     boolean finalizado=false;
 
-    public prestamo(String fD, String fP, socio socioP, libro libroP, boolean finalizado) {
+    public prestamo(LocalDate fD, LocalDate fP, socio socioP, libro libroP, boolean finalizado) {
         this.fD = fD;
         this.fP = fP;
         this.socioP = socioP;
@@ -54,19 +55,19 @@ public class prestamo implements Serializable {
         this.socioP = socioP;
     }
 
-    public String getfP() {
+    public LocalDate getfP() {
         return fP;
     }
 
-    public void setfP(String fP) {
+    public void setfP(LocalDate fP) {
         this.fP = fP;
     }
 
-    public String getfD() {
+    public LocalDate getfD() {
         return fD;
     }
 
-    public void setfD(String fD) {
+    public void setfD(LocalDate fD) {
         this.fD = fD;
     }
 

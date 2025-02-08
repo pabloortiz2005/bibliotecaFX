@@ -1,9 +1,6 @@
 package org.example.bibliotecafx.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
@@ -12,7 +9,10 @@ public class libro implements Serializable {
     // título, ISBN, autor, editorial y año de publicación
     String titulo;
     String ISBN;
-    autor autor;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private autor autor;
+
     String editorial;
     int anyoPub;
 
