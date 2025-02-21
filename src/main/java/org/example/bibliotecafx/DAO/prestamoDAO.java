@@ -100,43 +100,21 @@ public class prestamoDAO implements Iprestamo{
      */
     @Override
     public prestamo create(prestamo prestamo) {
-
-        libroDAO libroDAO = new libroDAO();
-        socioDAO socioDAO = new socioDAO();
-
-        Scanner scanner = new Scanner(System.in);
-        Scanner scanner2 = new Scanner(System.in);
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        prestamo prestamo5 = new prestamo();
-
-        System.out.print("Titulo del libro: ");
-        String titulo = scanner.nextLine();
-        libro libro = libroDAO.findByISBN(titulo);
-
-        if (libro != null) {
-            prestamo5.setLibroP(libro);
-        } else {
-            System.out.println("No se encontró un libro con ese titulo.");
+        try {
+            session.beginTransaction();
+            System.out.println("Guardando préstamo: " + prestamo);
+            session.save(prestamo);
+            session.getTransaction().commit();
+            System.out.println("Préstamo guardado correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return null;
+        } finally {
+            session.close();
         }
-
-        System.out.print("Nombre del socio: ");
-        String nombre = scanner.nextLine();
-        socio socio = socioDAO.findByNombre(nombre);
-
-        if (socio != null) {
-            prestamo5.setSocioP(socio);
-        } else {
-            System.out.println("No se encontró un socio con ese nombre.");
-        }
-
-        System.out.print("Fecha de inicio: ");
-        prestamo5.setfP(scanner.nextLine());
-        System.out.print("Fecha de finalizacion");
-        prestamo5.setfD(scanner.nextLine());
-
-        return prestamo5;
+        return prestamo;
     }
-
 
 }

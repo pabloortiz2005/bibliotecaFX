@@ -9,8 +9,8 @@ public interface Ilibro {
     public List<libro> findAll();
     public libro findById(Integer id);
     public libro findByISBN(String ISBN);
-    public List<libro> findByAutor(autor autor);
-    public libro findByTitulo(String titulo);
+    public List<libro> findByAutor(String autorNombre);
+    List<libro> findByTitulo(String titulo);
     public void deleteById(Integer id);
     public libro ChangeLibro(libro libro);
     public libro create(libro libro);

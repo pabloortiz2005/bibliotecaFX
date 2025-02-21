@@ -61,18 +61,22 @@ public class libroDAO implements Ilibro {
     /**
      * Busca libros por un autor.
      *
-     * @param autor Objeto autor que se desea buscar.
+     * @param autorNombre nombre autor que se desea buscar.
      * @return Lista de libros del autor especificado.
      */
     @Override
-    public List<libro> findByAutor(autor autor) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<libro> librosPorAutor = session.createQuery("FROM libro WHERE autor = :autor", libro.class)
-                .setParameter("autor", autor)
-                .list();
-        session.close();
-        return librosPorAutor;
+    public List<libro> findByAutor(String autorNombre) {
+        List<libro> libros = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            libros = session.createQuery("FROM libro l WHERE l.autor.nombre = :autorNombre", libro.class)
+                    .setParameter("autorNombre", autorNombre)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return libros;
     }
+
 
     /**
      * Busca un libro por su título.
@@ -81,14 +85,16 @@ public class libroDAO implements Ilibro {
      * @return El libro con el título especificado.
      */
     @Override
-    public libro findByTitulo(String titulo) {
+    public List<libro> findByTitulo(String titulo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        libro libroPorTitulo = session.createQuery("FROM libro WHERE titulo = :titulo", libro.class)
+        List<libro> libros = session.createQuery("FROM libro WHERE titulo = :titulo", libro.class)
                 .setParameter("titulo", titulo)
-                .uniqueResult();
+                .getResultList();
         session.close();
-        return libroPorTitulo;
+        return libros;
     }
+
+
 
     @Override
     public List<libro> buscarLibro(String titulo, String autor, String isbn) {
@@ -149,38 +155,40 @@ public class libroDAO implements Ilibro {
         try {
             transaction = session.beginTransaction();
 
-            // Verificar si el libro ya existe por su ID
+            // Buscar el libro en la base de datos
             libro libroExistente = session.find(libro.class, libro.getIdL());
             if (libroExistente == null) {
-                System.out.println("No se encontró un libro con el ID proporcionado para actualizar.");
+                System.out.println("No se encontró el libro para actualizar.");
                 return null;
             }
 
-            // Actualizar los datos del libro existente
+            // Actualizar datos del libro
             libroExistente.setTitulo(libro.getTitulo());
             libroExistente.setISBN(libro.getISBN());
             libroExistente.setEditorial(libro.getEditorial());
             libroExistente.setAnyoPub(libro.getAnyoPub());
 
-            // Manejo del autor si cambia
-            autor autor = libro.getAutor();
-            if (autor != null) {
-                autorDAO autorDAO = new autorDAO();
-                autor autorExistente = autorDAO.findByNombre(autor.getNombre());
+            // Manejo del autor
+            autorDAO autorDAO = new autorDAO();
+            autor autorLibro = libro.getAutor();
+
+            if (autorLibro != null) {
+                autor autorExistente = autorDAO.findByNombre(autorLibro.getNombre());
+
                 if (autorExistente == null) {
-                    // Crear el autor si no existe y asignarlo
-                    autorDAO.create(autor);
-                    libroExistente.setAutor(autor);
+                    // Si el autor no existe, crearlo y asignarlo al libro
+                    session.save(autorLibro);
+                    libroExistente.setAutor(autorLibro);
                 } else {
-                    // Asociar el autor existente
+                    // Si ya existe, asignarlo al libro
                     libroExistente.setAutor(autorExistente);
                 }
             }
 
-            // Guardar los cambios realizados en el libro
+            // Guardar los cambios en el libro
             session.update(libroExistente);
             transaction.commit();
-            System.out.println("El libro con ID " + libroExistente.getIdL() + " ha sido actualizado correctamente.");
+            System.out.println("El libro se ha actualizado correctamente.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -192,6 +200,7 @@ public class libroDAO implements Ilibro {
 
         return libro;
     }
+
 
     /**
      * Crea un nuevo libro en la base de datos.
@@ -206,21 +215,28 @@ public class libroDAO implements Ilibro {
 
         try {
             transaction = session.beginTransaction();
-            autor autor = libro.getAutor();
 
-            if (autor != null) {
-                autorDAO autorDAO = new autorDAO();
-                autor autorExistente = autorDAO.findByNombre(autor.getNombre());
+            autorDAO autorDAO = new autorDAO();
+            autor autorLibro = libro.getAutor();
+
+            if (autorLibro != null) {
+                // Buscar si el autor ya existe
+                autor autorExistente = autorDAO.findByNombre(autorLibro.getNombre());
+
                 if (autorExistente == null) {
-                    autorDAO.create(autor); // Creamos el autor si no existe.
+                    // Si el autor no existe, crearlo y asignarlo al libro
+                    session.save(autorLibro);
+                    libro.setAutor(autorLibro);
                 } else {
-                    libro.setAutor(autorExistente); // Asociamos el autor existente con el libro.
+                    // Si ya existe, asignarlo directamente al libro
+                    libro.setAutor(autorExistente);
                 }
             }
 
+            // Guardar el libro con su autor asignado
             session.save(libro);
             transaction.commit();
-            System.out.println("El libro se ha creado correctamente.");
+            System.out.println("El libro y su autor se han guardado correctamente.");
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
@@ -230,4 +246,5 @@ public class libroDAO implements Ilibro {
 
         return libro;
     }
+
 }

@@ -45,32 +45,34 @@ public class socioDAO implements Isocio{
      * @return socios segun nombre
      */
     @Override
-    public socio findByNombre(String nombre) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        socio socio3 = session.createQuery("from socio where nombre = :nombre", socio.class)
-                .setParameter("nombre", nombre)
-                .uniqueResult();
-
-        session.close();
-
-        return socio3;
+    public List<socio> findByNombre(String nombre) {
+        List<socio> sociosEncontrados;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            sociosEncontrados = session.createQuery("FROM socio WHERE nombre LIKE :nombre", socio.class)
+                    .setParameter("nombre", "%" + nombre + "%") // Permite buscar coincidencias parciales
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return sociosEncontrados;
     }
     /**
      * @param nTel
      * @return socios segun numero telefono
      */
     @Override
-    public socio findByTel(Integer nTel) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        socio socio4 = session.createQuery("from socio where nTel = :nTel", socio.class)
-                .setParameter("nTel", nTel)
-                .uniqueResult();
-
-        session.close();
-
-        return socio4;
+    public List<socio> findByTel(Integer nTel) {
+        List<socio> sociosEncontrados;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            sociosEncontrados = session.createQuery("FROM socio WHERE nTel = :nTel", socio.class)
+                    .setParameter("nTel", nTel)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return sociosEncontrados;
     }
     /**
      * @param id

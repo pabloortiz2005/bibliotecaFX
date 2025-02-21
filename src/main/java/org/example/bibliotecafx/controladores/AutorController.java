@@ -1,14 +1,21 @@
 package org.example.bibliotecafx.controladores;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import org.example.bibliotecafx.DAO.autorDAO;
 import org.example.bibliotecafx.DAO.libroDAO;
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
 
+import java.io.IOException;
 import java.util.List;
 
 public class AutorController {
@@ -132,11 +139,7 @@ public class AutorController {
     }
 
     private void mostrarAlerta(String titulo, String mensaje, AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
+
     }
     @FXML
     private void listarTodosLosAutores() {
@@ -147,4 +150,19 @@ public class AutorController {
             mostrarAlerta("Error", "No se pudieron listar los autores.", AlertType.ERROR);
         }
     }
+
+    @FXML
+    public void Volver(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/bibliotecafx/Inicio.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo cargar la pantalla de inicio.", Alert.AlertType.ERROR);
+        }
+    }
+
 }

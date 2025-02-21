@@ -1,10 +1,7 @@
 package org.example.bibliotecafx.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
+import org.example.bibliotecafx.entities.autor;
 import java.io.Serializable;
 
 @Entity
@@ -12,7 +9,13 @@ public class libro implements Serializable {
     // título, ISBN, autor, editorial y año de publicación
     String titulo;
     String ISBN;
-    autor autor;
+
+    @ManyToOne(fetch = FetchType.EAGER)  // Cargar el autor automáticamente
+    @JoinColumn(name = "autor_id", nullable = false)
+    private autor autor;
+
+
+
     String editorial;
     int anyoPub;
 
@@ -31,6 +34,8 @@ public class libro implements Serializable {
     public libro() {
     }
 
+
+
     public int getAnyoPub() {
         return anyoPub;
     }
@@ -47,11 +52,11 @@ public class libro implements Serializable {
         this.editorial = editorial;
     }
 
-    public org.example.bibliotecafx.entities.autor getAutor() {
+    public autor getAutor() {
         return autor;
     }
 
-    public void setAutor(org.example.bibliotecafx.entities.autor autor) {
+    public void setAutor(autor autor) {
         this.autor = autor;
     }
 

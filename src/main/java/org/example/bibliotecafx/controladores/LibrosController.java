@@ -1,14 +1,21 @@
 package org.example.bibliotecafx.controladores;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import org.example.bibliotecafx.DAO.autorDAO;
 import org.example.bibliotecafx.DAO.libroDAO;
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.libro;
 
+import java.io.IOException;
 import java.util.List;
 
 public class LibrosController {
@@ -144,7 +151,6 @@ public class LibrosController {
         }
     }
 
-    // Editar un libro seleccionado
     @FXML
     private void editarLibroSeleccionado() {
         libro libroSeleccionado = tablaLibros.getSelectionModel().getSelectedItem();
@@ -154,8 +160,34 @@ public class LibrosController {
             return;
         }
 
-        // Editar el libro
-        crearNuevoLibro(); // Reutilizamos
+        TextInputDialog dialog = new TextInputDialog(libroSeleccionado.getTitulo());
+        dialog.setTitle("Editar Libro");
+        dialog.setHeaderText("Edita los datos del libro seleccionado:");
+
+        dialog.setContentText("Nuevo Título:");
+        String nuevoTitulo = dialog.showAndWait().orElse(libroSeleccionado.getTitulo());
+
+        dialog.setContentText("Nuevo ISBN:");
+        String nuevoISBN = dialog.showAndWait().orElse(libroSeleccionado.getISBN());
+
+        dialog.setContentText("Nueva Editorial:");
+        String nuevaEditorial = dialog.showAndWait().orElse(libroSeleccionado.getEditorial());
+
+        dialog.setContentText("Nuevo Año de Publicación:");
+        int nuevoAnyo = Integer.parseInt(dialog.showAndWait().orElse(String.valueOf(libroSeleccionado.getAnyoPub())));
+
+        try {
+            libroSeleccionado.setTitulo(nuevoTitulo);
+            libroSeleccionado.setISBN(nuevoISBN);
+            libroSeleccionado.setEditorial(nuevaEditorial);
+            libroSeleccionado.setAnyoPub(nuevoAnyo);
+
+            libroDAO.ChangeLibro(libroSeleccionado);
+            listarTodosLosLibros();
+            mostrarAlerta("Éxito", "El libro ha sido actualizado correctamente.", AlertType.INFORMATION);
+        } catch (Exception e) {
+            mostrarAlerta("Error", "No se pudo actualizar el libro. Detalles:\n" + e.getMessage(), AlertType.ERROR);
+        }
     }
 
     // Eliminar un libro seleccionado
@@ -191,6 +223,20 @@ public class LibrosController {
             tablaLibros.getItems().setAll(libros);
         } catch (Exception e) {
             mostrarAlerta("Error", "No se pudieron listar los libros.", AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    public void Volver(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/bibliotecafx/Inicio.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo cargar la pantalla de inicio.", Alert.AlertType.ERROR);
         }
     }
 }

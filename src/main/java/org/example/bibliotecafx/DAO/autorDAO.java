@@ -45,13 +45,21 @@ public class autorDAO implements Iautor{
     @Override
     public autor findByNombre(String nombre) {
         Session session = HibernateUtil.getSessionFactory().openSession();
+        autor autorEncontrado = null;
 
-        autor autor3 = session.find(autor.class, nombre);
+        try {
+            autorEncontrado = session.createQuery("FROM autor WHERE nombre = :nombre", autor.class)
+                    .setParameter("nombre", nombre)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
 
-        session.close();
-
-        return autor3;
+        return autorEncontrado;
     }
+
     /**
      * @param id
      * @return borra un autor segun id

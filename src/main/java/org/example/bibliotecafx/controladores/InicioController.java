@@ -62,7 +62,7 @@ public class InicioController {
     @FXML
     private void manejarGestionPrestamos(ActionEvent event) {
         System.out.println("Botón 'Gestion Prestamos' presionado");
-        cambiarEscena("/org/example/bibliotecafx/PrestamosP.fxml", event);
+        cambiarEscena("/org/example/bibliotecafx/PrestamoP.fxml", event);
     }
 
     /**

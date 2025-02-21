@@ -1,13 +1,20 @@
 package org.example.bibliotecafx.controladores;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import org.example.bibliotecafx.DAO.socioDAO;
 import org.example.bibliotecafx.entities.autor;
 import org.example.bibliotecafx.entities.socio;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SocioController {
@@ -85,37 +92,43 @@ public class SocioController {
         }
     }
 
-    // Buscar socios por nombre
     @FXML
     private void buscarSocio() {
         String nombre = nombreBuscar.getText().trim();
-        Integer NTel = Integer.valueOf(NTelBuscar.getText().trim());
-        socio socio = new socio();
-        try {
+        String telefonoTexto = NTelBuscar.getText().trim();
 
-            if (nombre.isEmpty() && NTel == null) {
-                mostrarAlerta("Error", "Para buscar tienes que rellenar algo.", AlertType.ERROR);
+        if (nombre.isEmpty() && telefonoTexto.isEmpty()) {
+            mostrarAlerta("Error", "Para buscar, debes ingresar al menos un criterio.", AlertType.ERROR);
+            return;
+        }
+
+        if (!nombre.isEmpty() && !telefonoTexto.isEmpty()) {
+            mostrarAlerta("Error", "Solo puedes buscar por un criterio a la vez.", AlertType.ERROR);
+            return;
+        }
+
+        try {
+            List<socio> sociosEncontrados;
+
+            if (!nombre.isEmpty()) {
+                sociosEncontrados = socioDao.findByNombre(nombre);
+            } else {
+                Integer telefono = Integer.valueOf(telefonoTexto);
+                sociosEncontrados = socioDao.findByTel(telefono);
             }
-            if (!nombre.isEmpty() && NTel != null) {
-                mostrarAlerta("Error", "Solo rellena un campo.", AlertType.ERROR);
-            }
-            if (nombre.isEmpty() && NTel != null) {
-                socio= socioDao.findByTel(NTel);
-            }
-            if (!nombre.isEmpty() && NTel == null) {
-                socio = socioDao.findByNombre(nombre);
-            }
-            if (socio != null) {
-                tablaSocios.getItems().setAll(socio);
-                tablaSocios.getSelectionModel().select(socio);
-                listarTodosLosSocios();
+
+            if (sociosEncontrados != null && !sociosEncontrados.isEmpty()) {
+                tablaSocios.getItems().setAll(sociosEncontrados);
             } else {
                 mostrarAlerta("Información", "No se encontraron socios con los criterios proporcionados.", AlertType.INFORMATION);
             }
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error", "El número de teléfono debe ser un valor numérico.", AlertType.ERROR);
         } catch (Exception e) {
             mostrarAlerta("Error", "Hubo un error al buscar socios. Detalles:\n" + e.getMessage(), AlertType.ERROR);
         }
     }
+
 
 
     // Editar un autor seleccionado
@@ -178,6 +191,19 @@ public class SocioController {
             tablaSocios.getItems().setAll(socio);
         } catch (Exception e) {
             mostrarAlerta("Error", "No se pudieron listar los socios.", AlertType.ERROR);
+        }
+    }
+    @FXML
+    public void Volver(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/bibliotecafx/Inicio.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo cargar la pantalla de inicio.", Alert.AlertType.ERROR);
         }
     }
 }
